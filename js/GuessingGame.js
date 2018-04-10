@@ -102,3 +102,37 @@ Game.prototype.provideHint = function(){
     }
     return shuffle(arr);
 }
+
+function makeAGuess(game) {
+    var guess = $('#player-input').val();
+    $('#player-input').val("");
+    $('#title').text(game.playersGuessSubmission(parseInt(guess,10)));
+}
+
+
+$(document).ready(function() {
+    var game = new Game();
+
+    $('#submit').click(function(e) {
+       makeAGuess(game);
+    })
+
+    $('#player-input').keypress(function(event) {
+        if ( event.which == 13 ) {
+           makeAGuess(game);
+        }
+    })
+
+    $('#hint').click(function() {
+        var hints = game.provideHint();
+        $('#title').text('The winning number is '+hints[0]+', '+hints[1]+', or '+hints[2]);
+    });
+    
+    $('#reset').click(function() {
+        game = newGame();
+        $('#title').text('Play the Guessing Game!');
+        $('#subtitle').text('Guess a number between 1-100!')
+        $('.guess').text('-');
+        $('#hint, #submit').prop("disabled",false);
+    })
+})
