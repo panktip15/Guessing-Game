@@ -64,34 +64,68 @@ Game.prototype.playersGuessSubmission = function(num){
 
 
 //checks the guesses and provides feedback
-Game.prototype.checkGuess = function(){
-    console.log(this.difference())
-    
-    if(this.playersGuess === this.winningNumber){
+
+Game.prototype.checkGuess = function() {
+    if(this.playersGuess===this.winningNumber) {
         $('#hint, #submit').prop("disabled",true);
         $('#subtitle').text("Press the Reset button to play again!")
-        return 'You Win!';
-    } else if(this.pastGuesses.indexOf(this.playersGuess)> -1){
-        return 'You have already guessed that number.';
-    } else if(this.pastGuesses.length < 4){
-        this.pastGuesses.push(this.playersGuess);
-        $('#guess-list li:nth-child('+ this.pastGuesses.length +')').text(this.playersGuess);
-    } else if(this.pastGuesses.length === 4){
-        $('#hint, #submit').prop("disabled",true);
-        $('#subtitle').text("Press the Reset button to play again!")
-        return 'You Lose.';
-    } 
-    
-    if(this.difference() < 10){
-        return 'You\'re burning up!';
-    } else if(this.difference() < 25){
-        return 'You\'re lukewarm.'
-    } else if(this.difference() < 50){
-        return 'You\'re a bit chilly.'
-    } else if(this.difference() < 100){
-        return 'You\'re ice cold!';
+        return 'You Win!'
+    }
+    else {
+        if(this.pastGuesses.indexOf(this.playersGuess) > -1) {
+            return 'You have already guessed that number.';
+        }
+        else {
+            this.pastGuesses.push(this.playersGuess);
+            $('#guess-list li:nth-child('+ this.pastGuesses.length +')').text(this.playersGuess);
+            if(this.pastGuesses.length === 5) {
+                $('#hint, #submit').prop("disabled",true);
+                $('#subtitle').text("Press the Reset button to play again!")
+                return 'You Lose.';
+            }
+            else {
+                var diff = this.difference();
+                if(this.isLower()) {
+                    $('#subtitle').text("Guess Higher!")
+                } else {
+                    $('#subtitle').text("Guess Lower!")
+                }
+                if(diff < 10) return'You\'re burning up!';
+                else if(diff < 25) return'You\'re lukewarm.';
+                else if(diff < 50) return'You\'re a bit chilly.';
+                else return'You\'re ice cold!';
+            }
+        }
     }
 }
+// Game.prototype.checkGuess = function(){
+//     console.log(this.difference())
+    
+//     if(this.playersGuess === this.winningNumber){
+//         $('#hint, #submit').prop("disabled",true);
+//         $('#subtitle').text("Press the Reset button to play again!")
+//         return 'You Win!';
+//     } else if(this.pastGuesses.indexOf(this.playersGuess)> -1){
+//         return 'You have already guessed that number.';
+//     } else if(this.pastGuesses.length < 4){
+//         this.pastGuesses.push(this.playersGuess);
+//         $('#guess-list li:nth-child('+ this.pastGuesses.length +')').text(this.playersGuess);
+//     } else if(this.pastGuesses.length === 4){
+//         $('#hint, #submit').prop("disabled",true);
+//         $('#subtitle').text("Press the Reset button to play again!")
+//         return 'You Lose.';
+//     } 
+    
+//     if(this.difference() < 10){
+//         return 'You\'re burning up!';
+//     } else if(this.difference() < 25){
+//         return 'You\'re lukewarm.'
+//     } else if(this.difference() < 50){
+//         return 'You\'re a bit chilly.'
+//     } else if(this.difference() < 100){
+//         return 'You\'re ice cold!';
+//     }
+// }
 
 //creates an instance of the new game
 function newGame(){
@@ -141,3 +175,4 @@ $(document).ready(function() {
         $('#hint, #submit').prop("disabled",false);
     })
 })
+
